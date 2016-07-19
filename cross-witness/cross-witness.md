@@ -1,7 +1,7 @@
-# The Cross-Witness Algorithm: Privacy Protection in a Fully Transparent System
+# Cross-Witness Algorithm: Privacy Protection in a Fully Transparent System
 By **Vlad Gluhovsky** and **Gavin Wood**
 
-# Introduction
+## Introduction
 
 Being based upon a quasi-Turing-complete (quasi because it's actually bounded) virtual machine, Ethereum is an extremely versatile system. However one of its greatest strengths---universal auditability---seems to lead to a fatal flaw, namely an inescapable lack of privacy. Here we demonstrate an algorithm in order to prove that this is not the case.
 

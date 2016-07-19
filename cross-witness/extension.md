@@ -1,4 +1,5 @@
-## Further Analysis
+## Further Analysis of Cross-Witness
+by Vlad Gluhovsky
 
 ### Economics of Cross-Witness
 
@@ -24,13 +25,32 @@ Now, if we add one extra iteration (in case of two-layer onion), we only add one
 
 If `dest` already contains some Ether, then we don't need the witnesses at all. The algorithm becomes extremely simple:
 
-1. Each participant `p` transfers some predetermined Ether value (`stake`) from their source accounts (`src`) to the contract, attaching the chosen public key `public[p]` and encrypted address of his anonymous account (`dest`) for the possible Intermediate Arbitration. 
+1. Each participant `p` transfers some predetermined Ether value (`stake`) from their source accounts (`src`) to the contract, attaching the chosen public key `public[p]` and encrypted address of his anonymous account (`dest`) for the possible Arbitration.
 
-2. Every `dest` account registers itself, transferring security deposit to the contract. The number of transactions in this step is not limited -- anyone who is willing to risk his deposit is allowed to participate. After this step is complete, each participant `p` must sign the contract from his source account.
+2. Every `dest` account registers itself, transferring security deposit to the contract. The number of transactions in this step is not limited -- anyone who is willing to risk his deposit is allowed to participate. 
 
-3. If the number of `dest` accounts is equal (or less) than the number of initial participants, and everyone has signed the contract, than `stake` will be transferred to the `dest` accounts.
+3. Now each participant `p` must sign the contract from his source account.
 
-4. If somebody has not signed, or the number of `dest` accounts is greater than the number of `src`, then arbitration is triggered. Everybody must reveal his private key associated with his `src`, then the contract will automatically decrypt the designated `dest` addresses, and `dest` addresses that were not pre-registered will lose their deposit. Non-signing without valid reason tantamounts to cheating.
+4. If the number of `dest` accounts is equal (or less) than the number of initial participants, and everyone has signed the contract, than `stake` will be transferred to the `dest` accounts.
+
+5. If somebody has not signed, or the number of `dest` accounts is greater than the number of `src`, then arbitration is triggered. Everybody must reveal his private key associated with his `src`, then the contract will automatically decrypt the designated `dest` addresses, and `dest` addresses that were not pre-registered will lose their deposit. Non-signing without valid reason tantamounts to cheating.
+
+## Simplified
+
+This algorithm may be simplified, skipping the signing step:
+
+1. Each `dest` account registers itself, transferring security deposit to the smart contract. After timeout expires, participation is closed.
+
+2. After his `dest` is registered, each participant transfers some predetermined Ether value (`stake`) from their source accounts (`src`) to the contract, attaching the following data for the possible arbitration:
+
+	a. public key, which correspond to the randomly-chosen private key
+	b. address of his anonymous account (`dest`), encrypted with the private key mentioned above
+
+3. As soon as the number of `src` participants will reach (or exceed) the number of `dest` participants, the `stake` transfer from `src` to `dest` is triggered. Otherwise, after timeout expires, arbitration is triggered.
+
+4. Arbitration. Every `src` participant must reveal his pre-chosen key. Then the smart contract will decrypt the designated `dest` addresses, and `dest` addresses that were not pre-registered will lose their deposit.
+
+Security deposit may be much less than the `stake`, but must be enough to pay for the possible arbitration, plus all the transaction costs.
 
 ## Perfect Anonymity
 
