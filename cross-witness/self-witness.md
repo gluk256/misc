@@ -25,4 +25,6 @@ Security deposit may be much less than the `sum`, but must be enough to pay for 
 
 Timeout should allow several attempts to send a transaction plus some additional time in case of network disruption, etc.
 
-Another modification of the algorithm might stipulate the arbitration if the number of `src` will exceed the number of `dest`, in order to limit the risk, so that even in case of error any participant will never lose more than the predefined security deposit.
+Another modification of the algorithm might stipulate the arbitration if the number of `src` will exceed the number of `dest`, in order to limit the technical risks, so that even in case of error any participant will never lose more than the predefined security deposit.
+
+In order to make the arbitration cheaper, instead of ecnrypting the `dest` address we can simply hash them with random salt. Then, during the arbitration, particiapants should reveal the salt instead of private key.
