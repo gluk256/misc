@@ -2,7 +2,7 @@
 
 This algorithm is suitable for those Ethereum-based games, where outcome of every round for the player depends only on the RNG and (optionally) the number, chosen by the player, but not on the action of other players. E.g. it may be suitable for roulette, slots, etc., but not for those games, where outcome depends on the other players or just their number, as may be the case in lotteries. For example, a game of roulette could be modeled as a number of rounds where a single player plays against the casino. In this case, a pseudorandom number could be generated with the following algorithm.
 
-1. Casino generates a new pair of private/public keys (PrivKey and PubKey).
+1. Casino generates a new pair of private/public keys (PrivKey and PubKey) for some deterministic signing algorithm (e.g.RSA).
 2. Casino creates a smart contract, which contains the public key (PubKey), maximal number of participants, and the Ether bounty. (Optionally: casino changes PubKey of the existing smart contract).
 3. Player chooses the number to bet on (B), and a random number (R) in certain format (e.g. 20 bytes). The player might even specify the range of numbers B, if the rules of the game allow it (odd vs. even, etc.).
 4. Player sends a transaction (TX) containing the Ether bet, along with the data: B and R.

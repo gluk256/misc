@@ -27,7 +27,9 @@ But what if somebody wants to disrupt the game by submitting just a random numbe
 
 #### Discussing the Step 15
 
-After the seed is revealed, the new round of calculations starts. The organizer (or whoever else is willing to do so) needs to consequently break a certain (big) number of Simplified DES (or similar encryptions). This should be quite expensive and time-consuming task. However, validity check is cheap and quick, and everyone can perform it easily (this task will be assigned to the smart contract). Parameters of this task should be such, that it should not be feasible to break it on a single computer on the fly (as required by the possible attacker -- within the single block mining time). Besides, the number of iterations should be such, that even outsourcing this task should not be feasible because of the latency. But the organizer should be able to perform it in a matter of days.
+After the seed is revealed, the new round of calculations starts. The organizer (or whoever else is willing to do so) needs to consequently bruteforce a certain (big) number of Simplified DES (or similar encryptions). This should be quite expensive and time-consuming task. However, validity check is cheap and quick, and everyone can perform it easily (this task will be assigned to the smart contract). Parameters of this task should be such, that it should not be feasible to break it on a single computer on the fly (as required by the possible attacker -- within the single block mining time). Besides, the number of iterations should be such, that even outsourcing this task should not be feasible because of the latency. But the organizer should be able to perform it in a matter of days.
+
+It is also possible to implement Step 15 using the "Witness vs. Challenger" algorithm.
 
 #### Possible Attack
 
@@ -35,4 +37,8 @@ How can anyone manipulate the outcome of the game in any meaningful way? Theoret
 
 #### Further Discussion
 
+In order to make the outcome even less predictable, the organizers might offer a large reward to a miner, who will submit the last transaction during Step 5. It will increase probability of at least one transaction being submitted in the last block. Most miners will hold a valid transaction till the very last moment, and only one of them will be able to submit it.
+
 Because of dynamic nature of this algorithm, the first lottery organizer who implements it will enjoy the world-wide interest and publicity in all kind of software-relate media. The amount of attention will be unprecedented, and therefore will hugely add to the marketing of his project.
+
+Also, some people might trust the lottery design, and therfore might be interested only in buying the ticket without participating in RNG. The organizers might provide an option to buy a ticket in a single transaction for such non-contributing participants.
