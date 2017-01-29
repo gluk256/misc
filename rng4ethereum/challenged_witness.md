@@ -31,6 +31,6 @@ The arbitration algorithm iterates through the following steps:
 
 Anyone should be allowed to participate as witness, or challenger, or both. The number of witnesses in a single smart contract may be unlimited. The number of challengers to the single witness may also be unlimited. However, the response time for the witness should be encreased if multiple participants will challeng him. The required bounty should be such as to prevent the unlimited delay -- the frodulent participants should eventually run out of money. The confiscated bounties should be stored in the smart contract untill the end of the entire game, at which point they should be shared between the honest witnesses and challengers.
 
-If all witnesses will fail, then the smart contract will be reopened for further participation. Eventually somebody will provide the correct answer.
+If all witnesses will fail, then the smart contract will be reopened for further participation. Eventually somebody will provide the correct answer. Thus, a single honest participant can ensure the right outcome of the Arbitration.
 
 When choosing number P, we must be careful. The gas required for step 5 must not exceed the current gas limit in a single block, otherwise this step will be impossible to execute. Alternatively, P should be adjusted dynamically, according to the current gas limit.
