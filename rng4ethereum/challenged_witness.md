@@ -1,6 +1,6 @@
-### Witness vs. Challenger
+### RNG Algorithm "Witness vs. Challenger"
 
-This algorithm is designed to generate deterministic pseudo-random numbers from a block hash or any other seed revealed in certain Ethereum block. It is suitable for slow games like lottery, but not for roulette or slot. 
+This algorithm is designed to generate deterministic pseudo-random numbers from a block hash or any other seed revealed in certain Ethereum block in such a way, that the outcome will be unpredictable at the time of mining. It is suitable for slow games like lottery, but not for roulette. 
 
 After a predefined block is mined, one or more participants obtain the seed (through the some algorithm) and create a hash-chain of a certain length. It should be done off-chain, using either ASIC or general purpose computer. The hashing algorithm is the same as used for Ethereum mining (proof of work): SHA-3. 
 
