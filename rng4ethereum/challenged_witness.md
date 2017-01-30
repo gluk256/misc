@@ -29,8 +29,12 @@ The arbitration algorithm iterates through the following steps:
 
 ## Further Discussion
 
-Anyone should be allowed to participate as witness, or challenger, or both. The number of witnesses in a single smart contract may be unlimited. The number of challengers to the single witness may also be unlimited. However, the response time for the witness should be encreased if multiple participants will challeng him. The required bounty should be such as to prevent the unlimited delay -- the frodulent participants should eventually run out of money. The confiscated bounties should be stored in the smart contract untill the end of the entire game, at which point they should be shared between the honest witnesses and challengers.
+Anyone should be allowed to participate as witness, or challenger, or both. The number of witnesses in a single smart contract may be unlimited. The number of challengers to the single witness may also be unlimited. However, the response time for the witness should be encreased if multiple participants will challeng him. The required bounty should be such as to prevent the unlimited delay -- the frodulent participants should eventually run out of money. The confiscated bounties should be stored in the smart contract untill the end of the entire game, at which point they should be shared between the honest witnesses and challengers. 
 
-If all witnesses will fail, then the smart contract will be reopened for further participation. Eventually somebody will provide the correct answer. Thus, a single honest participant can ensure the right outcome of the Arbitration.
+The result published by a witness will be accepted by the smart contract as correct, if during certain period of time this witness will be able to defend himself against all the challengers, or remain unchallenged. The smart contract should be open for participation untill at least one witness wins.
 
 When choosing number P, we must be careful. The gas required for step 5 must not exceed the current gas limit in a single block, otherwise this step will be impossible to execute. Alternatively, P should be adjusted dynamically, according to the current gas limit.
+
+## Conclusion
+
+Since everyone is allowed to participate as a witness, the correct outcome will be guaranteed even if only one participant is honest and everybody else is cheating.
