@@ -78,7 +78,7 @@ It happens if adversary was NOT satisfied with the pre-existing result (i.e. if 
 
 Let *Prev* is probability of S = 1 in block number X-1. Then
 
-*Pb* = xxxxxxxxxxxxxxxx
+*Pb* = *Pk* * (1 - *Prev*) * *z*/2 = *m* * *z*^2 * (1 - *Prev*) * 1/2
 
 Event M: during the mining the block number X, adversary finds the block AND NOT the all first X bits of the bitstream are 1.
 
@@ -88,21 +88,21 @@ Event N: same as event M, AND adversary finalize the block.
 
 It happens if adversary was satisfied with the pre-existing result (i.e. if S = 1).
 
-*Pn* = xxxxxxxxxxxxxxxx
+*Pn* = *Pm* * *Prev* = *Prev* * *m* * (1 - *z*)
 
 Event Q: adversary finalize the block number X.
 
-*Pq* = *Pb* + *Pn*
+*Pq* = *Pb* + *Pn* = *m* * *z*^2 * (1 - *Prev*) * 1/2 + *Prev* * *m* * (1 - *z*)
 
-Event R: honest participants finalize the block number X.
+Event T: honest participants finalize the block number X.
 
-*Pr* = 1 - *Pq*
+*Pt* = 1 - *Pq*
 
 Event S: honest participants finalize the block number X, AND S = 1.
 
-*Ps* = xxxxxxxxxxxxxxxxxxxxxx
+*Ps* = *Pt* * (*z*/2 + (1 - *z*) * *Prev*) = (1 - *Pq*) * (*z*/2 + (1 - *z*) * *Prev*)
 
 Event X: S = 1 in block number X.
 
-*Px* = *Pq* + *Ps*
+*Px* = *Pq* + *Ps* = *Pq* + (1 - *Pq*) * (*z*/2 + (1 - *z*) * *Prev*)
 
