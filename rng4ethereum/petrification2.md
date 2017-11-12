@@ -15,9 +15,9 @@ We consider our algorithm to be fair, if for any predefined bias *ε*, it is pos
 ## Algorithm Description
 For each block, we define *Rᵢ* to be bit *i* from a pseudorandom IID bitstream *R* seeded by the block hash. 
 The algorithm is initialized by setting *S* to *R₀* in the first block *b*. 
-In each subsequent block *b+n* such that 1 ≤ *n* < *k*, *S* is overwritten by *Rₙ₊₁* iff ∀(*i* ≤ *n*): *Rᵢ* = 1. 
+In each subsequent block *b+n* such that 1 ≤ *n* < *k*, *S* is flipped iff ∀(*i* ≤ *n*): *Rᵢ* = 1. 
 
-In other words, *S* will be overwritten by a random bit in each subsequent block with exponentially diminishing probability.
+In other words, *S* will be flipped in each subsequent block with exponentially diminishing probability.
 
 ## Calculations
 Suppose, adversary is interested in the final outcome of S = 1.
@@ -60,11 +60,11 @@ Let *z* = 1 / 2^*X*, then
 
 Event B: same as event K, AND adversary finalize the block.
 
-It happens if adversary was NOT satisfied with the pre-existing result (i.e. if S = 0), AND new result is S = 1.
+It happens if adversary was NOT satisfied with the pre-existing result (i.e. if S = 0).
 
 Let *Prev* is probability of S = 1 in block number X-1. Then
 
-*Pb* = *Pk* * (1 - *Prev*) * 1/2 = *m* * *z* * (1 - *Prev*) * 1/2
+*Pb* = *Pk* * (1 - *Prev*) = *m* * *z* * (1 - *Prev*)
 
 Event M: during the mining the block number X, adversary finds the block AND NOT the all first X bits of the bitstream are 1.
 
@@ -78,17 +78,35 @@ It happens if adversary was satisfied with the pre-existing result (i.e. if S = 
 
 Event Q: adversary finalize the block number X.
 
-*Pq* = *Pb* + *Pn* = *m* * *z* * (1 - *Prev*) * 1/2 + *Prev* * *m* * (1 - *z*)
+*Pq* = *Pb* + *Pn* = *m* * *z* * (1 - *Prev*) + *Prev* * *m* * (1 - *z*) = *m* * *z* + *Prev* * *m* - 2 * *Prev* * *m* * *z*
 
 Event T: honest participants finalize the block number X.
 
 *Pt* = 1 - *Pq*
 
-Event S: honest participants finalize the block number X, AND S = 1.
+Event Y: honest participants finalize the block number X, AND all first X bits of the bitstream are 1.
 
-*Ps* = *Pt* * (*z*/2 + (1 - *z*) * *Prev*) = (1 - *Pq*) * (*z*/2 + (1 - *z*) * *Prev*)
+*Py* = *Pt* * *z* = (1 - *Pq*) * *z*
+
+Event V: honest participants finalize the block number X, AND NOT all first X bits of the bitstream are 1.
+
+*Pv* = *Pt* * (1 - *z*) = (1 - *Pq*) * (1 - *z*)
+
+Event U: same as event Y AND S = 1.
+
+It happends if previous value of S was 0.
+
+*Pu* = *Py* * (1 - *Prev*) = (1 - *Pq*) * *z* * (1 - *Prev*)
+
+Event W: same as event V AND S = 1.
+
+*Pw* = *Pv* * *Prev* = (1 - *Pq*) * (1 - *z*) * *Prev*
+
+Event I: honest participants finalize the block number X, AND S = 1.
+
+*Pi* = *Pu* + *Pw* = (1 - *Pq*) * *z* * (1 - *Prev*) + (1 - *Pq*) * (1 - *z*) * *Prev*
 
 Event X: S = 1 in block number X.
 
-*Px* = *Pq* + *Ps* = *Pq* + (1 - *Pq*) * (*z*/2 + (1 - *z*) * *Prev*)
+*Px* = *Pq* + *Pi* = *Pq* + (1 - *Pq*) * *z* * (1 - *Prev*) + (1 - *Pq*) * (1 - *z*) * *Prev*
 
