@@ -1,6 +1,9 @@
 ## Petrification Algorithm
+
 Authors: 
+
 Vlad Gluhovsky <gluk256@gmail.com>
+
 Daniel A. Nagy <nagydani@epointsystem.org>
 
 ## Introduction
@@ -17,123 +20,89 @@ In each subsequent block *b+n* such that 1 ≤ *n* < *k*, *S* is overwritten by 
 In other words, *S* will be overwritten by a random bit in each subsequent block with exponentially diminishing probability.
 
 ## Calculations
-Suppose, adversary is interested in the final outcome of 1.
+Suppose, adversary is interested in the final outcome of S = 1.
 
 Let us calculate the approximate probabilities of certain events.
 
-Event A: first block is found by the honest participants (not the adversary). 
-
-*Pa* = 1 - *m*
-
-Event B: first block is found by the honest participants AND finalized.
-
-We assume that honest participants always finalize their blocks. Same as in Event 1.
-
-*Pb* = 1 - *m*
-
-Event C: first block is found by the honest participants AND finalized AND S = 1.
-
-*Pc* = (1 - *m*) / 2
-
-Event D: first block is found by adversary.
+Event D: next block is found by adversary.
 
 *Pd* = *m*
 
-Event E: one or more blocks are found by adversary AND finalized with S = 1.
+Event E: if during the mining process adversary does not finilize blocks, then probability of adversary finding N consecutive blocks before next block is finilized by the honest participants:
 
-We assume that adversary always discards blocks if S = 0 and then continues mining in hope to find another block.
+*Pe* = *m*^*N*
 
-*Pe* ≈ (*m* + *m^2* + *m^3* + *m^4* + ..................[ad infinitum]) / 2
+Event C: if during the mining process adversary does not finilize blocks, then probability of adversary finding 1 or 2 or .... or N consecutive blocks before next block is finilized by the honest participants:
 
-Event 1: first block is finalized with S = 1.
+*Pc* = *m*^1 + *m*^2 + ..... + *m*^*N*
 
-*P1* = *Pc* + *Pe* ≈ (1 + *m^2* + *m^3* + *m^4* + ..................[ad infinitum]) / 2
+Let us calculate *Pc* for all possible outcomes (N -> ∞).
 
-In case *m* ≪ 1, *P1* ≈ (1 + *m^2*) / 2.
+*Pc* = *m*^1 + *m*^2 + ..... + *m*^*N* + ...... + *m*^∞
 
-In the worst possible case *m* = 1/2, *P1* = (1 + 2*m^2*) / 2.
+In case *m* ≪ 1, *Pc* ≈ *m*. In case *m* -> 1/2, *Pc* ≈ 2*m*. 
 
-To simplify further calculations, we assume *m* ≪ 1 and 
+To simplify the further calculations, we assume *Pc* = *m*.
 
-*m^2* + *m^3* + *m^4* + .......... ≈ *m^2*. 
+Event A1: during the first block mining, adversary finds one or more blocks and finalizes one of them.
 
-In other words, we assume that adversary either does not find a block or finds only one block.
+We assume that adversary will always finilize the block if the resulting value of S = 1. 
 
-Event F: second block is found by the honest participants AND first two bits are 1.
+*Pa1* = *Pc* / 2
 
-*Pf* = (1/2^2) * (1 - *m*)
+Event H1: honest participants find the first block and finilize the result.
 
-Event G: second block is found by the honest participants AND first two bits are 1 AND S = 1.
+We assume that honest participants always finalize the found block.
 
-*Pg* = *Pf* / 2 = (1/2^2) * (1 - *m*) * 1/2
+*Ph1* = 1 - *Pa*
 
-Event H: second block is found by the honest participants AND not all of first two bits are 1.
+Event 1: probability of S = 1 after the first block is finalized.
 
-*Ph* = (1 - 1/2^2) * (1 - *m*)
+*P1* = *Pa1* + *Ph1* / 2
 
-Event J: second block is found by the honest participants AND not all of first two bits are 1 AND S = 1.
+Event J: during the mining the block number X, adversary finds the block.
 
-*Pj* = *P1* * *Ph* = *P1* * (1 - 1/2^2) * (1 - *m*)
+*Pj* = *Pd* = *m*
 
-Event K: second block is found by the honest participants AND S = 1.
+Event K: during the mining the block number X, adversary finds the block AND all first X bits of the bitstream are 1.
 
-*Pk* = *Pg* + *Pj* = (*P1* * (1 - 1/2^2) * (1 - *m*)) + ((1/2^2) * (1 - *m*) * 1/2) = (1 - *m*) * (*P1* - *P1* * 1/2^2 + 1/2 * 1/2^2)
+*Pk* = *Pj* / 2^*X*
 
-Event M: second block is found by adversary AND first two bits are 1.
+Let *z* = 1 / 2^*X*, then
 
-*Pm* = 1/2^2 * *m*
+*Pk* = *Pj* * *z* = *m* * *z*
 
-Event N: second block is found by adversary AND first two bits are 1 AND second block is finalized by adversary.
+Event B: same as event K, AND adversary finalize the block.
 
-Adversary will finalize their block iff the preexisting value of S is 0 AND new value of S is 1.
+It happens if adversary was NOT satisfied with the pre-existing result (i.e. if S = 0), AND new result is S = 1.
 
-*Pn* = *Pm* * (1 - *P1*) * 1/2 = 1/2^2 * *m* * (1 - *P1*) * 1/2
+Let *Prev* is probability of S = 1 in block number X-1. Then
 
-Event NN: second block is found by adversary AND first two bits are 1 AND second block is NOT finalized by adversary.
+*Pb* = xxxxxxxxxxxxxxxx
 
-*Pnn* = *Pm* * (1 - (1 - *P1*) * 1/2) = *Pm* * (1 + *P1*) * 1/2 = 1/2^2 * *m* * (1 + *P1*) * 1/2
+Event M: during the mining the block number X, adversary finds the block AND NOT the all first X bits of the bitstream are 1.
 
-Event Q: second block is found by adversary AND not all of first two bits are 1.
+*Pm* = *Pj* * (1 - *z*) = *m* * (1 - *z*)
 
-*Pq* = 1/2^2 * *m*
+Event N: same as event M, AND adversary finalize the block.
 
-Event S: second block is found by adversary AND not all of first two bits are 1 AND second block is finalized by adversary.
+It happens if adversary was satisfied with the pre-existing result (i.e. if S = 1).
 
-Adversary will finalize their block iff the preexisting value of S is 1.
+*Pn* = xxxxxxxxxxxxxxxx
 
-*Ps* = *Pq* * *P1*
+Event Q: adversary finalize the block number X.
 
-Event SS: second block is found by adversary AND not all of first two bits are 1 AND second block is NOT finalized by adversary.
+*Pq* = *Pb* + *Pn*
 
-*Pss* = *Pq* * (1 - *P1*) = 1/2^2 * *m* * (1 - *P1*)
+Event R: honest participants finalize the block number X.
 
-Event T: second block is found by adversary AND second block is finalized by adversary.
+*Pr* = 1 - *Pq*
 
-Adversary will finalize their block if the resulting value of S is 1.
+Event S: honest participants finalize the block number X, AND S = 1.
 
-*Pt* = *Pn* + *Ps* = 1/2^2 * *m* * (1 - *P1*) * 1/2 + (1/2^2 * *m* * *P1*)
+*Ps* = xxxxxxxxxxxxxxxxxxxxxx
 
-Event U: second block is found by adversary AND rejected by adversary.
+Event X: S = 1 in block number X.
 
-*Pu* = *Pnn* + *Pss* = (1/2^2 * *m* * (1 + *P1*) * 1/2) + (1/2^2 * *m* * (1 - *P1*)) = 1/2^2 * *m* * (3/2 - *P1*/2)
-
-Event V: second block is found by adversary AND rejected by adversary AND S = 1.
-
-If second block is rejected by adversary, then it will be finalized by honest participants.
-
-*Pv* = *Pu* * *Pk* 
-
-*Pv* = 1/2^2 * *m* * (3/2 - *P1*/2) * *P1* * (1 - 1/2^2) * (1 - *m*)
-
-Event 2: S = 1 after second block is finalized.
-
-*P2* = *Pk* + *Pt* + *Pv* 
-
-*P2* = (1 - *m*) * (*P1* - *P1* * 1/2^2 + 1/2 * 1/2^2) + 1/2^2 * *m* * (1 - *P1*) * 1/2 + (1/2^2 * *m* * *P1*) + 1/2^2 * *m* * (3/2 - *P1*/2) * *P1* * (1 - 1/2^2) * (1 - *m*)
-
-Event X: S = 1 after block number X is finalized.
-
-Let *Pp* is probability of S = 1 in the previous block (number X-1), and *z* = 1/2^X. 
-
-*Px* = (1 - *m*) * (*Pp* - *Pp* * *z* + *z*/2) + *z* * *m*/2 * (1 - *Pp*) + *z* * *m* * *Pp* + *z* * *m* * (3/2 - *Pp*/2) * *Pp* * (1 - *z*) * (1 - *m*)
+*Px* = *Pq* + *Ps*
 
