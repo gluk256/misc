@@ -6,6 +6,12 @@ Vlad Gluhovsky <gluk256@gmail.com>
 
 Daniel A. Nagy <nagydani@epointsystem.org>
 
+## Warning
+
+Computer simulation has yilded negative results. 
+
+This algorithm is probably useless.
+
 ## Introduction
 The objective of the presented algorithm is to generate a fair random bit after *k* blocks in face of an adversary controlling 
 0 < *m* ≪ 1 of overall hashing power. We assume that *m* < 1/2, because otherwise the blockchain project would be prone to 51%-attack.
@@ -32,7 +38,7 @@ Since *m* ≪ 1, and in order to simplify calculations, we assume that adversary
 
 Event A: during the first block mining, adversary finds one or more blocks and finalizes one of them.
 
-We assume that adversary will always finilize the block if the resulting value of S = 1. 
+We assume that adversary will always finalize the block if the resulting value of S = 1. 
 
 *Pa* = *Pc* / 2 = *m* / 2
 
