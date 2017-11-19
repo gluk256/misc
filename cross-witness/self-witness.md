@@ -1,5 +1,5 @@
 ## Self-Witness Algorithm: Privacy Protection in a Fully Transparent System
-By **Vlad Gluhovsky**
+Author: **Vlad Gluhovsky**
 
 ### Problem
 
@@ -18,6 +18,8 @@ If their `dest` accounts already contain a small amount of Ether, they can use t
 4. If the number of `src` is still less than the number of `dest` after timeout expires, Ether transfer to `src` is triggered. The contract will transfer all its Ether back to the `src` accounts, dividing it equally between them.
 
 ### Futher Considerations
+
+The `dest` participants must trust the `src` participants, but not vice versa. 
 
 Security deposit may be much less than the `sum`, but must be enough to cover all the transaction costs, plus optional compensation to the honest participants. Therefore, the number of `dest` participants must be limited.
 
