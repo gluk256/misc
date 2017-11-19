@@ -9,22 +9,22 @@ If their `dest` accounts already contain a small amount of Ether, they can use t
 
 ### Solution
 
-1. Every participant generates a random private key and a corresponding public key, then encrypts his `dest` address with this public key.
+1. Each `dest` account registers itself by transferring a small security deposit to the smart contract. Participation is closed after timeout has expired or if the number of participants has reached the limit. Security deposit must be enough to cover all transaction costs.
 
-2. Each `dest` account registers itself by transferring a small security deposit to the smart contract. Participation is closed after timeout has expired or if the number of participants has reached the limit.
+2. All participants, whose `dest` accounts were successfully registered (transaction was validated), will transfer some predetermined Ether value (`sum`) from their source accounts (`src`) to the contract.
 
-3. All participants, whose `dest` accounts were successfully registered (transaction was validated), will transfer some predetermined Ether value (`sum`) from their source accounts (`src`) to the contract, attaching the encrypted `dest` address to each transaction for the possible arbitration.
+3. As soon as the number of `src` participants will reach (or exceed) the number of `dest` participants, Ether transfer to `dest` is triggered. The contract will transfer all its Ether to the `dest` accounts, dividing it equally between them.
 
-4. As soon as the number of `src` participants will reach (or exceed) the number of `dest` participants, Ether transfer to `dest` is triggered. The contract will transfer all its Ether to the `dest` accounts, dividing it equally between them. The generated private keys should be deleted and never used again.
-
-5. If the number of `src` is still less than the number of `dest` after timeout expires, arbitration is triggered. Every `src` participant must reveal his generated private key. Then the smart contract will decrypt all the data attached to transactions, and create a list of valid `dest` addresses. Any `dest` that is not in the list will lose its deposit. The rest of the Ether will be returned back to its original owners.
+4. If the number of `src` is still less than the number of `dest` after timeout expires, Ether transfer to `src` is triggered. The contract will transfer all its Ether back to the `src` accounts, dividing it equally between them.
 
 ### Futher Considerations
 
-Security deposit may be much less than the `sum`, but must be enough to pay for the possible arbitration, plus all the transaction costs, plus possible compensation to the honest participants. Therefore, the number of participants must be limited, and depend on the required security deposit.
+Security deposit may be much less than the `sum`, but must be enough to cover all the transaction costs, plus optional compensation to the honest participants. Therefore, the number of `dest` participants must be limited.
 
-Timeout should allow several attempts to send a transaction plus some additional time in case of network disruption, etc.
+Timeout should allow multiple attempts to send a transaction plus some additional time in case of network disruption, etc.
 
-Another modification of the algorithm might stipulate the arbitration if the number of `src` will exceed the number of `dest`, in order to limit the technical risks, so that even in case of error any participant will never lose more than the predefined security deposit.
+Another modification of the Step 3 might limit the losses if the number of `src` will exceed the number of `dest`, so that any participant will never lose more than the predefined security deposit.
 
-In order to make the arbitration cheaper, instead of ecnrypting the `dest` address we can simply hash them with random salt. Then, during the arbitration, particiapants should reveal the salt instead of private key.
+It is easy to extend this algorithm for the purposes of anonymous token transfer.
+
+
