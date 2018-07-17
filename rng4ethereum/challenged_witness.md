@@ -1,4 +1,6 @@
-### RNG Algorithm "Witness vs. Challenger"
+### RNG Algorithm "Challenged Witness"
+
+#### by Vlad Gluhovsky & Daniel Nagy
 
 This algorithm is designed to generate deterministic pseudo-random numbers from a block hash or any other seed revealed in certain Ethereum block in such a way, that the outcome will be unpredictable at the time of mining. It is suitable for slow games like lottery, but not for roulette. 
 
@@ -14,7 +16,7 @@ The smart contract will be unable to verify the outcome automatically, due to th
 
 ## Arbitration
 
-After the witness publishes the outcome of hash-chain computation in a dedicated smart contract (along with attached bounty), during certain period of time people will be able to verify the outcome externally. If anyone detects fraud, one or more independent verifiers will be able to challenge the witness via a transaction to this smart contract before timeout expires. Any such challenge will also require a bounty (in order to discourge frodulent challenges resulting in postponed outcome). Please note, that any challenge can only postpone, but not change the outcome, which is inherently deterministic at this point. If the challenged witness will fail to defend himself, he will lose the bounty. Otherwise, the challenger will lose. 
+After the witness publishes the outcome of hash-chain computation in a dedicated smart contract (along with attached bounty), during certain period of time people will be able to verify the outcome externally. If anyone detects fraud, one or more independent verifiers will be able to challenge the witness via a transaction to this smart contract before timeout expires. Any such challenge will also require a bounty (in order to discourage frodulent challenges resulting in postponed outcome). Please note, that any challenge can only postpone, but not change the outcome, which is inherently deterministic at this point. If the challenged witness will fail to defend himself, he will lose the bounty. Otherwise, the challenger will lose. 
 
 The arbitration algorithm iterates through the following steps:
 
@@ -27,7 +29,7 @@ The arbitration algorithm iterates through the following steps:
 
 ## Further Discussion
 
-Anyone should be allowed to participate as witness, or challenger, or both. The number of witnesses in a single smart contract may be unlimited. The number of challengers to the single witness may also be unlimited. However, the response time for the witness should be encreased if multiple participants will challeng him. The required bounty should be such as to prevent the unlimited delay -- the frodulent participants should eventually run out of money. The confiscated bounties should be stored in the smart contract untill the end of the entire game, at which point they should be shared between the honest witnesses and challengers. 
+Anyone should be allowed to participate as witness, or challenger, or both. The number of witnesses in a single smart contract may be unlimited. The number of challengers to the single witness may also be unlimited. However, the response time for the witness should be increased if multiple participants will challeng him. The required bounty should be such as to prevent the unlimited delay -- the frodulent participants should eventually run out of money. The confiscated bounties should be stored in the smart contract untill the end of the entire game, at which point they should be shared between the honest participants. 
 
 The result published by a witness will be accepted by the smart contract as correct, if during certain period of time this witness will be able to defend himself against all the challengers, or remain unchallenged. The smart contract should be open for participation untill at least one witness wins.
 
