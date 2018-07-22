@@ -4,16 +4,22 @@ This algorithm is suitable for those Ethereum-based games, where outcome of ever
 
 1. Casino generates a new pair of private/public keys (PrivKey and PubKey) for some deterministic signing algorithm (e.g.RSA).
 2. Casino creates a smart contract, which contains the public key (PubKey), maximal number of participants, and the Ether bounty. (Optionally: casino changes PubKey of the existing smart contract).
-3. Player chooses the number to bet on (B), and a random number (R) in certain format (e.g. 20 bytes). The player might even specify the range of numbers B, if the rules of the game allow it (odd vs. even, etc.).
-4. Player sends a transaction (TX) containing the Ether bet, along with the data: B and R.
-5. The contract checks validity and format of the numbers B and R. Invalid TX is rejected.
-6. Additionally, the contract checks if the number R has already been used by this player in previous rounds, in which case TX is rejected. (This step is necessary if the contract is reused for multiple rounds of the game).
+3. Player chooses the number to bet on (B), and two random numbers (openly R and secret hidden HR) in certain format (e.g. 20 bytes). The player might even specify the range of numbers B, if the rules of the game allow it (odd vs. even, etc.).
+Player signs the `R + HR` (HR is unknown to any others until step 10) into `PlS`, using his private key PlPrivKey.
+4. Player sends a transaction (TX) containing the Ether bet, along with the data: `B`, `R` and `PlRs` (and possibly his PlPubKey if still unknown, e. g. the first user round).
+5. The contract checks validity and format of the numbers B and R and the signature PlS. Invalid TX is rejected.
+6. Additionally, the contract checks if the numbers R and PlS have already been used by this player in previous rounds, in which case TX is rejected. (This step is necessary if the contract is reused for multiple rounds of the game).
 7. The contract concatenates the random number R with the public address (A) of the player's Ether account, from which TX was sent: V = A + R. The resulting value V is stored in the contract. The size of V is always the same: size(V) = size(A) + size(R). At this point the outcome of the round (win or lose) becomes deterministic.
 8. Casino must sign the resulting value V with its PrivKey, thus producing the digital signature S = sign(PrivKey, V), and send the corresponding TX, containing S.
 9. The contract recovers the actual public key (K) from the digital signature S, and verifies that it is equal to the previously published PubKey (K == PubKey). If APK does not match PubKey, or if casino fails to perform step 8 within a predefined time frame, it is tantamount to cheating. In this case the contract sends the bounty to the player along with the original bet, and the contract is closed via suicide. (In case of multiplayer game, the bounty is shared between all players).
-10. The contract uses S as a seed for the predefined PRNG algorithm (e.g. SHA-3 based), which produces the lucky number (L), e.g. between 0 and 36.
-11. If B corresponds to L, the player wins, otherwise casino wins. The contract sends the bet to the winner.
-12. Now casino may close the contract and recover the bounty, or initiate a new round of the game. Alternatively, the contract might be programmed to automatically proceed to the next round, unless the casino closes it.
+10. Player sends the secret HR in order to complete the user-part of transaction for future PRNG calculation.
+At this point the outcome of the round (win or lose) becomes the verification finality. No matter which algorithm used for the creation of signature S, the prediction resp. the impact of casino to the result of future PRNG calculation is impossible, until all the players disclose the secret HR.
+11. The contract verifies privided players `R + HR`, using known signature `PlS` and PlPubKey of the player.
+If PlS matchs PlPubKey, it stores the player HR into contract and calculates all players seed HS as `HS = HS + HR` in the order the player secret HR received (where initial HS = S).
+If PlS does not match PlPubKey, or if player fails to perform step 10 within a predefined time frame, it is tantamount to cheating. In this case the contract sends the bounty to the casino (or in case of multiplayer game, the bounty may be shared between all players/casino).
+12. The contract uses `HS` as a seed for the predefined PRNG algorithm (e.g. SHA-3 based), which produces the lucky number (L), e.g. between 0 and 36.
+13. If B corresponds to L, the player wins, otherwise casino wins. The contract sends the bet to the winner.
+14. Now casino may close the contract and recover the bounty, or initiate a new round of the game. Alternatively, the contract might be programmed to automatically proceed to the next round, unless the casino closes it.
 
 After casino has chosen the PrivKey, its actions become deterministic. The player can not predict the result of digital signature, and therefore his choice of the random number R can influence the outcome only in the same way as rolling the dice in the real life (hence the name of this algorithm). Thus, neither of the participants can manipulate the outcome in any meaningful way.
 
